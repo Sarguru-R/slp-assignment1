@@ -3,25 +3,27 @@ import streamlit as st
 
 # SQL query templates
 sql_templates = {
-    'Tell me what the notes are for South Australia ': 'SELECT Notes FROM table WHERE Current slogan = SOUTH AUSTRALIA',
-    'What is the current series where the new series began in June 2011?': 'SELECT Current series FROM table WHERE Notes = New series began in June 2011',
-    'What is the format for South Australia?': 'SELECT Format FROM table WHERE State/territory = South Australia',
-    'Name the background colour for the Australian Capital Territory': 'SELECT Text/background colour FROM table WHERE State/territory = Australian Capital Territory',
-    'how many times is the fuel propulsion is cng?': 'SELECT COUNT Fleet Series (Quantity) FROM table WHERE Fuel Propulsion = CNG',
-    'what is the fuel propulsion where the fleet series (quantity) is 310-329 (20)?': 'SELECT Fuel Propulsion FROM table WHERE Fleet Series (Quantity) = 310-329 (20)',
-    'who is the manufacturer for the order year 1998?': 'SELECT Manufacturer FROM table WHERE Order Year = 1998',
-    'how many times is the model ge40lfr?': 'SELECT COUNT Manufacturer FROM table WHERE Model = GE40LFR',
-    'how many times is the fleet series (quantity) is 468-473 (6)?': 'SELECT COUNT Order Year FROM table WHERE Fleet Series (Quantity) = 468-473 (6)',
-    'what is the powertrain (engine/transmission) when the order year is 2000?': 'SELECT Powertrain (Engine/Transmission) FROM table WHERE Order Year = 2000',
-    
+    'what flights are available from pittsburgh to baltimore on thursday morning': 'SELECT * FROM flights WHERE origin = "Pittsburgh" AND destination = "Baltimore" AND day = "Thursday" AND time = "morning"',
+    'what is the arrival time in san francisco for the 755 am flight leaving washington': 'SELECT arrival_time FROM flights WHERE origin = "Washington" AND destination = "San Francisco" AND flight_number = "755" AND time = "morning"',
+    'cheapest airfare from tacoma to orlando': 'SELECT MIN(airfare) FROM flights WHERE origin = "Tacoma" AND destination = "Orlando"',
+    'round trip fares from pittsburgh to philadelphia under 1000 dollars': 'SELECT * FROM flights WHERE origin = "Pittsburgh" AND destination = "Philadelphia" AND round_trip_fare < 1000',
+    'i need a flight tomorrow from columbus to minneapolis': 'SELECT * FROM flights WHERE origin = "Columbus" AND destination = "Minneapolis" AND day = "tomorrow"',
+    'what kind of aircraft is used on a flight from cleveland to dallas': 'SELECT aircraft_type FROM flights WHERE origin = "Cleveland" AND destination = "Dallas"',
+    'show me the flights from pittsburgh to los angeles on thursday': 'SELECT * FROM flights WHERE origin = "Pittsburgh" AND destination = "Los Angeles" AND day = "Thursday"',
+    'all flights from boston to washington': 'SELECT * FROM flights WHERE origin = "Boston" AND destination = "Washington"',
+    'what kind of ground transportation is available in denver': 'SELECT * FROM ground_transportation WHERE city = "Denver"',
+    'show me the flights from dallas to san francisco': 'SELECT * FROM flights WHERE origin = "Dallas" AND destination = "San Francisco"',
+    'show me the flights from san diego to newark by way of houston': 'SELECT * FROM flights WHERE origin = "San Diego" AND destination = "Newark" AND layover_city = "Houston"',
+    'what is the cheapest flight from boston to bwi': 'SELECT * FROM flights WHERE origin = "Boston" AND destination = "BWI" ORDER BY airfare ASC LIMIT 1',
+    'all flights to baltimore after 6 pm': 'SELECT * FROM flights WHERE destination = "Baltimore" AND time > "6 pm"'
 }
 
 # Streamlit app
 def main():
-    st.title('Query Generator')
+    st.title('Flight Query Generator')
 
     # Text input for user to enter the query
-    user_query = st.text_area('Enter your query:', height=100)
+    user_query = st.text_area('Enter your flight query:', height=100)
 
     # Button to execute the query
     if st.button('Generate SQL Query'):
@@ -37,7 +39,7 @@ def query_to_sql(query):
     for query_type, template in sql_templates.items():
         if query_type in query:
             return template
-    return "SELECT COUNT(*) FROM head WHERE age > 56"
+    return "SELECT * FROM airports WHERE city = 'Orlando'"
 
 if __name__ == '__main__':
     main()
